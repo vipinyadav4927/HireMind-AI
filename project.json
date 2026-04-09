@@ -1,0 +1,25 @@
+{
+  "overview": "A complete AI-powered interview platform with separate Admin and Candidate panels. Admins add candidates and view detailed analytics. Candidates complete adaptive AI-driven interviews with voice questions, audio recording, and automated evaluation scoring.",
+  "features": [
+    "Admin panel with candidate management and unique link generation",
+    "AI-adaptive interviews with 12+ role-based questions",
+    "Text and voice question delivery via Web Speech API",
+    "Audio-only recording per question via MediaRecorder",
+    "Tab-switch detection with auto-end protection",
+    "AI evaluation: score, strengths, weaknesses, recommendation",
+    "Google Sheets sync for candidate data and results",
+    "Department-wise analytics dashboard with charts",
+    "Fully responsive design for desktop, tablet, and mobile"
+  ],
+  "category": "productivity",
+  "tags": [
+    "interview",
+    "ai",
+    "hr",
+    "recruitment",
+    "analytics",
+    "audio-recording",
+    "google-sheets"
+  ],
+  "last_updated": "2026-04-09T06:49:51.218Z"
+}
