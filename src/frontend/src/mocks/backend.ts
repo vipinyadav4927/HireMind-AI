@@ -1,6 +1,8 @@
 import type { backendInterface } from "../backend";
 
 const now = BigInt(Date.now()) * BigInt(1_000_000);
+const mockAdminEmail = "vipinyadav4926@gmail.com";
+const mockAdminPassword = "1234";
 
 const sampleCandidates = [
   {
@@ -66,8 +68,8 @@ const sampleCandidates = [
 ];
 
 export const mockBackend: backendInterface = {
-  adminLogin: async (email: string, _password: string) => {
-    if (email === "admin@interviewai.com") {
+  adminLogin: async (email: string, password: string) => {
+    if (email === mockAdminEmail && password === mockAdminPassword) {
       return { __kind__: "ok" as const, ok: "mock-admin-token-123" };
     }
     return { __kind__: "err" as const, err: "Invalid credentials" };

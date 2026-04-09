@@ -1,10 +1,9 @@
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createActor } from "../backend";
 import type { EvaluationResult } from "../types";
+import { useBackendActor } from "./useBackendActor";
 
 export function useInterviewSession(sessionId: string | null) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
 
   return useQuery({
     queryKey: ["interview-session", sessionId],
@@ -18,7 +17,7 @@ export function useInterviewSession(sessionId: string | null) {
 }
 
 export function useCreateInterviewSession() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,7 +38,7 @@ export function useCreateInterviewSession() {
 }
 
 export function useUpdateTabSwitchCount() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -58,7 +57,7 @@ export function useUpdateTabSwitchCount() {
 }
 
 export function useCompleteInterview() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const queryClient = useQueryClient();
 
   return useMutation({

@@ -1,10 +1,9 @@
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createActor } from "../backend";
 import { useAdminAuthStore } from "../stores/adminAuthStore";
+import { useBackendActor } from "./useBackendActor";
 
 export function useCandidates() {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
   const { isAdminAuthenticated } = useAdminAuthStore();
 
   return useQuery({
@@ -18,7 +17,7 @@ export function useCandidates() {
 }
 
 export function useCandidateByEmail(email: string) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
 
   return useQuery({
     queryKey: ["candidate", email],
@@ -31,7 +30,7 @@ export function useCandidateByEmail(email: string) {
 }
 
 export function useCandidateByToken(token: string | null) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
 
   return useQuery({
     queryKey: ["candidate-by-token", token],
@@ -44,7 +43,7 @@ export function useCandidateByToken(token: string | null) {
 }
 
 export function useCreateCandidate() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -77,7 +76,7 @@ export function useCreateCandidate() {
 }
 
 export function useCandidateLogin() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
 
   return useMutation({
     mutationFn: async ({
@@ -93,7 +92,7 @@ export function useCandidateLogin() {
 }
 
 export function useValidateCandidateSession(token: string | null) {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
 
   return useQuery({
     queryKey: ["candidate-session", token],
@@ -107,7 +106,7 @@ export function useValidateCandidateSession(token: string | null) {
 }
 
 export function useSyncFromSheets() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const queryClient = useQueryClient();
 
   return useMutation({

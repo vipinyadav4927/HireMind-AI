@@ -188,7 +188,7 @@ function ViewPasscodeModal({
   candidate: Candidate;
   onClose: () => void;
 }) {
-  const interviewLink = `${window.location.origin}/interview?token=${candidate.id}`;
+  const interviewLink = `${window.location.origin}/interview/login?token=${candidate.id}`;
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="bg-card border-border max-w-md mx-4">
@@ -266,7 +266,7 @@ function AddCandidateDrawer({
   const onSubmit = (data: AddCandidateForm) => {
     createCandidate(data, {
       onSuccess: (candidate) => {
-        const interviewLink = `${window.location.origin}/interview?token=${candidate.id}`;
+        const interviewLink = `${window.location.origin}/interview/login?token=${candidate.id}`;
         reset();
         onCreated({ candidate, interviewLink });
       },
@@ -664,7 +664,7 @@ export default function AdminCandidatesPage() {
                             data-ocid="copy-link-btn"
                             className="flex items-center gap-1 px-2 py-1 rounded-md text-xs text-muted-foreground hover:text-primary hover:bg-primary/10 border border-transparent hover:border-primary/20 transition-smooth"
                             onClick={async () => {
-                              const link = `${window.location.origin}/interview?token=${c.id}`;
+                              const link = `${window.location.origin}/interview/login?token=${c.id}`;
                               await navigator.clipboard.writeText(link);
                               toast.success("Interview link copied!");
                             }}

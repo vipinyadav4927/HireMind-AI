@@ -1,10 +1,9 @@
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createActor } from "../backend";
 import { useAdminAuthStore } from "../stores/adminAuthStore";
+import { useBackendActor } from "./useBackendActor";
 
 export function useAdminLogin() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const { setAdminAuth } = useAdminAuthStore();
   const queryClient = useQueryClient();
 
@@ -26,7 +25,7 @@ export function useAdminLogin() {
 }
 
 export function useAdminLogout() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
   const { adminToken, clearAdminAuth } = useAdminAuthStore();
   const queryClient = useQueryClient();
 
@@ -43,7 +42,7 @@ export function useAdminLogout() {
 }
 
 export function useValidateAdminSession() {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
   const { adminToken } = useAdminAuthStore();
 
   return useQuery({
@@ -58,7 +57,7 @@ export function useValidateAdminSession() {
 }
 
 export function useCreateAdmin() {
-  const { actor } = useActor(createActor);
+  const { actor } = useBackendActor();
 
   return useMutation({
     mutationFn: async ({

@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useRouter } from "@tanstack/react-router";
 import { BrainCircuit, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { createActor } from "../../backend";
 import { useAdminLogin } from "../../hooks/useAdminAuth";
+import { useBackendActor } from "../../hooks/useBackendActor";
 import { useAdminAuthStore } from "../../stores/adminAuthStore";
 
 interface LoginFormValues {
@@ -20,7 +19,7 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const { mutate: login, isPending } = useAdminLogin();
   const { isAdminAuthenticated } = useAdminAuthStore();
-  const { actor, isFetching: actorFetching } = useActor(createActor);
+  const { actor, isFetching: actorFetching } = useBackendActor();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -28,7 +27,10 @@ export default function AdminLoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({
-    defaultValues: { email: "", password: "" },
+    defaultValues: {
+      email: "vipinyadav4926@gmail.com",
+      password: "1234",
+    },
   });
 
   if (isAdminAuthenticated) {
@@ -156,8 +158,8 @@ export default function AdminLoginPage() {
                   {...register("password", {
                     required: "Password is required",
                     minLength: {
-                      value: 6,
-                      message: "At least 6 characters required",
+                      value: 4,
+                      message: "At least 4 characters required",
                     },
                   })}
                 />
@@ -202,7 +204,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          © {new Date().getFullYear()} InterviewAI. Authorised personnel only.
+          © {new Date().getFullYear()} HireMind AI. Authorised personnel only.
         </p>
       </div>
     </div>

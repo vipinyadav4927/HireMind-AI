@@ -55,10 +55,10 @@ module {
   public func ensureDefaultAdmin(admins : Map.Map<Text, Admin>) {
     if (admins.size() == 0) {
       let defaultAdmin : Admin = {
-        email = "admin@interviewai.com";
-        passwordHash = hashPassword("Admin123!");
+        email = "vipinyadav4926@gmail.com";
+        passwordHash = hashPassword("1234");
       };
-      admins.add("admin@interviewai.com", defaultAdmin);
+      admins.add("vipinyadav4926@gmail.com", defaultAdmin);
     };
   };
 

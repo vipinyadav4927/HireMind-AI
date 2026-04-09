@@ -1,10 +1,9 @@
-import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
-import { createActor } from "../backend";
 import { useAdminAuthStore } from "../stores/adminAuthStore";
+import { useBackendActor } from "./useBackendActor";
 
 export function useStats() {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
   const { isAdminAuthenticated } = useAdminAuthStore();
 
   return useQuery({
@@ -19,7 +18,7 @@ export function useStats() {
 }
 
 export function useDepartmentStats() {
-  const { actor, isFetching } = useActor(createActor);
+  const { actor, isFetching } = useBackendActor();
   const { isAdminAuthenticated } = useAdminAuthStore();
 
   return useQuery({

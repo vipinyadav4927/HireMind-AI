@@ -56,7 +56,7 @@ module {
     token : Text,
   ) : ?Candidate {
     switch (tokens.get(token)) {
-      case null { null };
+      case null { candidates.get(token) };
       case (?email) { candidates.get(email) };
     }
   };
