@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { sendInterviewResultToWebhook } from "../lib/googleSheetsWebhook";
+import { useCandidateAuthStore } from "../stores/candidateAuthStore";
 import type { EvaluationResult } from "../types";
 import { useBackendActor } from "./useBackendActor";
 
@@ -77,6 +79,19 @@ export function useCompleteInterview() {
         audioLinks,
       );
       if (result.__kind__ === "err") throw new Error(result.err);
+      const { candidateEmail, currentCandidate } =
+        useCandidateAuthStore.getState();
+      try {
+        await sendInterviewResultToWebhook({
+          candidate: currentCandidate,
+          candidateEmail,
+          sessionId,
+          evaluation,
+          audioLinks,
+        });
+      } catch (error) {
+        console.error("Failed to send interview result to webhook", error);
+      }
       return result.ok;
     },
     onSuccess: (_, { sessionId }) => {

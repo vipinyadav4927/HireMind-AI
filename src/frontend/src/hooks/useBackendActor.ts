@@ -1,7 +1,7 @@
 import { useActor } from "@caffeineai/core-infrastructure";
+import runtimeEnv from "../../env.json";
 import type { backendInterface } from "../backend";
 import { createActor } from "../backend";
-import runtimeEnv from "../../env.json";
 import { mockBackend } from "../mocks/backend";
 
 function isConfigured(value: string | undefined) {

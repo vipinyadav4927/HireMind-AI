@@ -460,17 +460,17 @@ export default function AdminCandidatesPage() {
   );
 
   const handleSync = useCallback(() => {
-    syncFromSheets([], {
+    syncFromSheets(candidates ?? [], {
       onSuccess: (count) => {
-        toast.success("Sync complete", {
-          description: `${count} candidate(s) synced from Google Sheets.`,
+        toast.success("Sheets sync sent", {
+          description: `${count} candidate(s) sent to the Google Sheets webhook.`,
         });
       },
       onError: (err: Error) => {
         toast.error("Sync failed", { description: err.message });
       },
     });
-  }, [syncFromSheets]);
+  }, [candidates, syncFromSheets]);
 
   const filtered = (candidates ?? []).filter((c) => {
     const matchSearch =
@@ -503,7 +503,7 @@ export default function AdminCandidatesPage() {
               variant="ghost"
               size="sm"
               onClick={handleSync}
-              disabled={isSyncing}
+              disabled={isSyncing || (candidates?.length ?? 0) === 0}
               className="gap-2 text-muted-foreground hover:text-foreground border border-border hover:border-primary/40"
               data-ocid="sync-sheets-btn"
             >

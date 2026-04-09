@@ -14,6 +14,10 @@ export interface Candidate {
   passcode: string;
   createdAt: Timestamp;
   interviewDate?: Timestamp;
+  recommendation?: string;
+  technicalRating?: bigint;
+  communicationRating?: bigint;
+  confidenceRating?: bigint;
 }
 
 export interface SheetCandidate {

@@ -346,7 +346,7 @@ export default function AdminDashboardPage() {
                 >
                   Candidates
                 </Link>{" "}
-                to sync from Google Sheets.
+                to send the latest candidate data to Google Sheets.
               </p>
             </div>
           </div>

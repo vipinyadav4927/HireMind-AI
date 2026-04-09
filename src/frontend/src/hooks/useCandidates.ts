@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  sendCandidateCreatedToWebhook,
+  sendCandidatesToWebhook,
+} from "../lib/googleSheetsWebhook";
 import { useAdminAuthStore } from "../stores/adminAuthStore";
+import type { Candidate } from "../types";
 import { useBackendActor } from "./useBackendActor";
 
 export function useCandidates() {
@@ -66,6 +71,11 @@ export function useCreateCandidate() {
         designation,
       );
       if (result.__kind__ === "err") throw new Error(result.err);
+      try {
+        await sendCandidateCreatedToWebhook(result.ok as Candidate);
+      } catch (error) {
+        console.error("Failed to send candidate to webhook", error);
+      }
       return result.ok;
     },
     onSuccess: () => {
@@ -106,27 +116,15 @@ export function useValidateCandidateSession(token: string | null) {
 }
 
 export function useSyncFromSheets() {
-  const { actor } = useBackendActor();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (
-      candidates: Array<{
-        email: string;
-        name: string;
-        department: string;
-        designation: string;
-        status: string;
-        score?: bigint;
-        strengths?: string;
-        weaknesses?: string;
-        audioLink?: string;
-      }>,
-    ) => {
-      if (!actor) throw new Error("Actor not available");
-      const result = await actor.syncFromSheets(candidates);
-      if (result.__kind__ === "err") throw new Error(result.err);
-      return result.ok;
+    mutationFn: async (candidates: Candidate[]) => {
+      if (candidates.length === 0) {
+        throw new Error("No candidates available to send");
+      }
+      const count = await sendCandidatesToWebhook(candidates);
+      return BigInt(count);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["candidates"] });
