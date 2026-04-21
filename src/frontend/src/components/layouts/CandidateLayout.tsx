@@ -36,14 +36,14 @@ export function CandidateLayout({
       <footer className="border-t border-border bg-muted/40 py-4">
         <div className="mx-auto max-w-[800px] px-4 sm:px-6">
           <p className="text-xs text-muted-foreground text-center">
-            © {new Date().getFullYear()}. Built with love using{" "}
+            &copy; {new Date().getFullYear()}. Built with love by{" "}
             <a
-              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
+              href="https://github.com/vipinyadav4927"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
-              caffeine.ai
+              Vipin Yadav
             </a>
           </p>
         </div>

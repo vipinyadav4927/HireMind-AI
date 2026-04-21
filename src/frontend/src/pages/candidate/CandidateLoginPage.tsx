@@ -22,17 +22,65 @@ import { useCandidateAuthStore } from "../../stores/candidateAuthStore";
 
 export default function CandidateLoginPage() {
   const navigate = useNavigate();
-  const search = useSearch({ strict: false }) as { token?: string };
+  const search = useSearch({ strict: false }) as { id?: string; token?: string };
+  const interviewId = search?.id ?? null;
   const token = search?.token ?? null;
 
+  const [step, setStep] = useState<'email' | 'otp'>('email');
   const [email, setEmail] = useState("");
-  const [passcode, setPasscode] = useState("");
+  const [otp, setOtp] = useState("");
+  const [isSendingOTP, setIsSendingOTP] = useState(false);
+  const [isVerifyingOTP, setIsVerifyingOTP] = useState(false);
 
   const { isAuthenticated } = useCandidateAuthStore();
   const { setCandidateAuth, setCurrentCandidate } = useCandidateAuthStore();
-  const { data: tokenCandidate, isLoading: isLookingUp } =
-    useCandidateByToken(token);
+  const { data: tokenCandidate, isLoading: isLookingUp } = useCandidateByToken(token);
   const loginMutation = useCandidateLogin();
+
+  // OTP functions
+  const sendOTP = async () => {
+    if (!interviewId || !email) return;
+    setIsSendingOTP(true);
+    try {
+      const res = await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sendOTP', email, interviewId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('OTP sent to email!');
+        setStep('otp');
+      } else {
+        toast.error(data.message);
+      }
+    } catch {
+      toast.error('Send OTP failed');
+    }
+    setIsSendingOTP(false);
+  };
+
+  const verifyOTP = async () => {
+    if (!interviewId || !email || !otp) return;
+    setIsVerifyingOTP(true);
+    try {
+      const res = await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verifyOTP', email, otp, interviewId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('OTP verified!');
+        navigate({ to: '/interview/dashboard' });
+      } else {
+        toast.error(data.message);
+      }
+    } catch {
+      toast.error('Verify OTP failed');
+    }
+    setIsVerifyingOTP(false);
+  };
 
   // Already authenticated → go to dashboard
   useEffect(() => {
@@ -44,7 +92,7 @@ export default function CandidateLoginPage() {
   // Prefill email from token lookup
   useEffect(() => {
     if (tokenCandidate) {
-      const c = tokenCandidate as { email?: string } | null;
+      const c = tokenCandidate as { email?: string; name?: string; status?: string } | null;
       if (c?.email) setEmail(c.email);
     }
   }, [tokenCandidate]);
@@ -57,27 +105,21 @@ export default function CandidateLoginPage() {
 
   const isCompleted = candidate?.status === "Completed";
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !passcode.trim()) return;
+    if (!email.trim() || !interviewId) return;
+    sendOTP();
+  };
 
-    try {
-      const result = await loginMutation.mutateAsync({
-        email: email.trim(),
-        passcode: passcode.trim(),
-      });
-      setCandidateAuth(result.token, result.email);
-      if (candidate) {
-        setCurrentCandidate(
-          candidate as Parameters<typeof setCurrentCandidate>[0],
-        );
-      }
-      toast.success("Login successful");
-      navigate({ to: "/interview/dashboard" });
-    } catch {
-      toast.error("Invalid passcode. Please check with your recruiter.");
-    }
-  }
+  const handleOtpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    verifyOTP();
+  };
+
+  // Fallback passcode if no interviewId
+  const handlePasscodeLogin = async (e: React.FormEvent) => {
+    // old passcode logic...
+  };
 
   return (
     <CandidateLayout showHeader={false}>

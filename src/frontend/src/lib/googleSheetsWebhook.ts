@@ -1,7 +1,6 @@
 import type { Candidate, EvaluationResult } from "../types";
 
-const GOOGLE_SHEETS_WEBHOOK_URL =
-  "https://script.google.com/macros/s/AKfycbxtLmv0qFnWl8bf0p3VMKL40nt5czc9KxbmwG_ijrMHQXFDfpuMOuyQEIQKJAakMbo7tA/exec";
+const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxtLmv0qFnWl8bf0p3VMKL40nt5czc9KxbmwG_ijrMHQXFDfpuMOuyQEIQKJAakMbo7tA/exec";
 const NS_PER_MS = BigInt(1_000_000);
 
 function toIsoTimestamp(timestamp?: bigint) {
