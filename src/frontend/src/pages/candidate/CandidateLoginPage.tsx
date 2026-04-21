@@ -19,7 +19,7 @@ import {
   useCandidateLogin,
 } from "../../hooks/useCandidates";
 import { useCandidateAuthStore } from "../../stores/candidateAuthStore";
-import { GOOGLE_SHEETS_WEBHOOK_URL } from "@/lib/googleSheetsWebhook";
+import type { GOOGLE_SHEETS_WEBHOOK_URL } from "@/lib/googleSheetsWebhook";
 
 export default function CandidateLoginPage() {
   const navigate = useNavigate();
@@ -51,13 +51,14 @@ export default function CandidateLoginPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('OTP sent to email!');
+        toast.success('OTP sent!');
         setStep('otp');
       } else {
-        toast.error(data.message);
+        toast.error(data.message || 'Send failed');
       }
-    } catch {
-      toast.error('Send OTP failed');
+    } catch (err) {
+      console.error(err);
+      toast.error('Network error');
     }
     setIsSendingOTP(false);
   };
@@ -73,13 +74,16 @@ export default function CandidateLoginPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('OTP verified!');
+        // Set auth (mock token for now)
+        setCandidateAuth(interviewId, email);
+        toast.success('Verified! Starting interview...');
         navigate({ to: '/interview/dashboard' });
       } else {
-        toast.error(data.message);
+        toast.error(data.message || 'Invalid OTP');
       }
-    } catch {
-      toast.error('Verify OTP failed');
+    } catch (err) {
+      console.error(err);
+      toast.error('Verify failed');
     }
     setIsVerifyingOTP(false);
   };
