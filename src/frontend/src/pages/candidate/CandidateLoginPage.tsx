@@ -19,6 +19,7 @@ import {
   useCandidateLogin,
 } from "../../hooks/useCandidates";
 import { useCandidateAuthStore } from "../../stores/candidateAuthStore";
+import { GOOGLE_SHEETS_WEBHOOK_URL } from "@/lib/googleSheetsWebhook";
 
 export default function CandidateLoginPage() {
   const navigate = useNavigate();
@@ -26,7 +27,8 @@ export default function CandidateLoginPage() {
   const interviewId = search?.id ?? null;
   const token = search?.token ?? null;
 
-  const [step, setStep] = useState<'email' | 'otp'>('email');
+  const [passcode, setPasscode] = useState("");
+  const [step, setStep] = useState<'passcode' | 'email' | 'otp'>('passcode');
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [isSendingOTP, setIsSendingOTP] = useState(false);
